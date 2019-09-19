@@ -49,6 +49,8 @@ class Document(Object):
             Document thumbnails as defined by sender.
     """
 
+    __slots__ = ["file_id", "file_name", "mime_type", "file_size", "file_reference", "date", "thumbs"]
+
     def __init__(
         self,
         *,
@@ -57,6 +59,7 @@ class Document(Object):
         file_name: str = None,
         mime_type: str = None,
         file_size: int = None,
+        file_reference: bytes = b"",
         date: int = None,
         thumbs: List[Thumbnail] = None
     ):
@@ -68,6 +71,7 @@ class Document(Object):
         self.file_size = file_size
         self.date = date
         self.thumbs = thumbs
+        self.file_reference = file_reference
 
     @staticmethod
     def _parse(client, document: types.Document, file_name: str) -> "Document":
@@ -84,6 +88,7 @@ class Document(Object):
             file_name=file_name,
             mime_type=document.mime_type,
             file_size=document.size,
+            file_reference=document.file_reference,
             date=document.date,
             thumbs=Thumbnail._parse(client, document),
             client=client

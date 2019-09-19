@@ -102,6 +102,7 @@ class DownloadMedia(BaseClient):
         file_size = None
         mime_type = None
         date = None
+        file_reference = b""
 
         if isinstance(message, pyrogram.Message):
             for kind in available_media:
@@ -120,6 +121,7 @@ class DownloadMedia(BaseClient):
             file_id_str = media.file_id
             media_file_name = getattr(media, "file_name", "")
             file_size = getattr(media, "file_size", None)
+            file_reference = getattr(media, "file_reference", b"")
             mime_type = getattr(media, "mime_type", None)
             date = getattr(media, "date", None)
 
@@ -216,7 +218,7 @@ class DownloadMedia(BaseClient):
             )
 
         # Cast to string because Path objects aren't supported by Python 3.5
-        self.download_queue.put((data, str(directory), str(file_name), done, progress, progress_args, path))
+        self.download_queue.put((data, str(directory), str(file_name), done, progress, progress_args, path, file_reference))
 
         if block:
             done.wait()

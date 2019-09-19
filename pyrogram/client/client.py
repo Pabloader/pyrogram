@@ -1212,7 +1212,7 @@ class Client(Methods, BaseClient):
             final_file_path = ""
 
             try:
-                data, directory, file_name, done, progress, progress_args, path = packet
+                data, directory, file_name, done, progress, progress_args, path, file_reference = packet
 
                 temp_file_path = self.get_file(
                     media_type=data.media_type,
@@ -1225,6 +1225,7 @@ class Client(Methods, BaseClient):
                     volume_id=data.volume_id,
                     local_id=data.local_id,
                     file_size=data.file_size,
+                    file_reference=file_reference,
                     is_big=data.is_big,
                     progress=progress,
                     progress_args=progress_args
@@ -1871,7 +1872,8 @@ class Client(Methods, BaseClient):
         file_size: int,
         is_big: bool,
         progress: callable,
-        progress_args: tuple = ()
+        progress_args: tuple = (),
+        file_reference: bytes = b""
     ) -> str:
         with self.media_sessions_lock:
             session = self.media_sessions.get(dc_id, None)
@@ -1922,21 +1924,21 @@ class Client(Methods, BaseClient):
             location = types.InputPhotoFileLocation(
                 id=document_id,
                 access_hash=access_hash,
-                file_reference=b"",
+                file_reference=file_reference,
                 thumb_size=thumb_size
             )
         elif media_type == 14:
             location = types.InputDocumentFileLocation(
                 id=document_id,
                 access_hash=access_hash,
-                file_reference=b"",
+                file_reference=file_reference,
                 thumb_size=thumb_size
             )
         else:
             location = types.InputDocumentFileLocation(
                 id=document_id,
                 access_hash=access_hash,
-                file_reference=b"",
+                file_reference=file_reference,
                 thumb_size=""
             )
 

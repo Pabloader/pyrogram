@@ -58,6 +58,8 @@ class Animation(Object):
             Animation thumbnails.
     """
 
+    __slots__ = ["file_id", "file_name", "mime_type", "file_size", "file_reference", "date", "width", "height", "duration", "thumbs"]
+
     def __init__(
         self,
         *,
@@ -67,6 +69,7 @@ class Animation(Object):
         height: int,
         duration: int,
         file_name: str = None,
+        file_reference: bytes = b"",
         mime_type: str = None,
         file_size: int = None,
         date: int = None,
@@ -83,6 +86,7 @@ class Animation(Object):
         self.height = height
         self.duration = duration
         self.thumbs = thumbs
+        self.file_reference = file_reference
 
     @staticmethod
     def _parse(
@@ -106,6 +110,7 @@ class Animation(Object):
             duration=getattr(video_attributes, "duration", 0),
             mime_type=animation.mime_type,
             file_size=animation.size,
+            file_reference=animation.file_reference,
             file_name=file_name,
             date=animation.date,
             thumbs=Thumbnail._parse(client, animation),

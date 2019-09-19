@@ -49,6 +49,8 @@ class Photo(Object):
             Available thumbnails of this photo.
     """
 
+    __slots__ = ["file_id", "width", "height", "file_size", "file_reference", "date", "thumbs"]
+
     def __init__(
         self,
         *,
@@ -58,7 +60,8 @@ class Photo(Object):
         height: int,
         file_size: int,
         date: int,
-        thumbs: List[Thumbnail]
+        thumbs: List[Thumbnail],
+        file_reference: bytes
     ):
         super().__init__(client)
 
@@ -68,6 +71,7 @@ class Photo(Object):
         self.file_size = file_size
         self.date = date
         self.thumbs = thumbs
+        self.file_reference = file_reference
 
     @staticmethod
     def _parse(client, photo: types.Photo) -> "Photo":
@@ -86,6 +90,7 @@ class Photo(Object):
                 width=big.w,
                 height=big.h,
                 file_size=big.size,
+                file_reference=photo.file_reference,
                 date=photo.date,
                 thumbs=Thumbnail._parse(client, photo),
                 client=client
