@@ -74,7 +74,8 @@ class Video(Object):
         supports_streaming: bool = None,
         file_size: int = None,
         date: int = None,
-        thumbs: List[Thumbnail] = None
+        thumbs: List[Thumbnail] = None,
+        file_reference: bytes = b""
     ):
         super().__init__(client)
 
@@ -88,6 +89,7 @@ class Video(Object):
         self.file_size = file_size
         self.date = date
         self.thumbs = thumbs
+        self.file_reference = file_reference
 
     @staticmethod
     def _parse(
@@ -110,6 +112,7 @@ class Video(Object):
             height=video_attributes.h,
             duration=video_attributes.duration,
             file_name=file_name,
+            file_reference=video.file_reference,
             mime_type=video.mime_type,
             supports_streaming=video_attributes.supports_streaming,
             file_size=video.size,
